@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ player }}'s Roll</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🎲 {{ player }}'s Roll</h1>
+        <p>Score so far: {{ score }}</p>
+
+        <h3>You rolled:</h3>
+        <div style="font-size: 2rem;">
+            {% for die in dice %}
+                🎲 {{ die }}
+            {% endfor %}
+        </div>
+
+        <form action="{{ url_for('play_turn') }}">
+            <button type="submit">Back to Turn</button>
+        </form>
+    </div>
+</body>
+</html>

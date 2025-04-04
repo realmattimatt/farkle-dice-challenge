@@ -1,3 +1,4 @@
+<!-- templates/game.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,14 +8,17 @@
 </head>
 <body>
     <div class="container">
-        <h1>🎮 Let’s Farkle!</h1>
-        <p>Players:</p>
+        <h1>🎲 Let the Game Begin!</h1>
+        <p><b>Players:</b></p>
         <ul>
-            {% for name in players %}
-                <li>{{ name }}</li>
+            {% for player in players %}
+                <li>{{ player }}</li>
             {% endfor %}
         </ul>
-        <p>Game logic coming soon...</p>
+
+        <p>This is where the game logic will go next.</p>
+
+        <button onclick="alert('Game loop coming soon!')">Roll Dice</button>
     </div>
 </body>
 </html>

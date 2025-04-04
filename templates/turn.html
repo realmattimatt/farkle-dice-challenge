@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ player }}'s Turn</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 {{ player }}'s Turn</h1>
+        <p>Current Score: {{ score }}</p>
+        <h2>Dice Roll:</h2>
+        <div>
+            {% for dice_face in dice_faces %}
+                <pre>{{ dice_face | join("\n") }}</pre>
+            {% endfor %}
+        </div>
+        <form action="{{ url_for('roll_dice') }}" method="POST">
+            <button type="submit">Roll Dice</button>
+        </form>
+    </div>
+</body>
+</html>
+
+
