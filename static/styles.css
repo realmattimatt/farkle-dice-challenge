@@ -1,5 +1,5 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
     background-color: #fef6e4;
     color: #333;
     padding: 2rem;
@@ -7,28 +7,41 @@ body {
     line-height: 1.6;
     font-size: 1.1rem;
     background-image: url("/static/images/2_red_dice.jpg");
-      background-size: cover; /* Ensures the image covers the entire background */
-      background-position: center; /* Centers the background image */
-      background-attachment: fixed; /* Keeps the background fixed during scrolling */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
 
 .container {
-    background-color: rgba(255, 255, 255, 0.55); /* Semi-transparent white */
-    backdrop-filter: blur(5px);                /* Blurs background behind */
-    -webkit-backdrop-filter: blur(6px);        /* Safari support */
-    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 16px;
     padding: 2rem;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    max-width: 900px;
+    margin: 0 auto;
 }
-
 
 h1 {
     color: #ec1f0c;
+    font-size: 2.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+h1::before {
+    content: "🎯";
+    font-size: 1.6rem;
 }
 
 h2 {
-    margin-top: 2rem;
-    color: #333;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #222;
+    font-size: 1.4rem;
+    font-weight: 600;
 }
 
 ul {
@@ -37,18 +50,17 @@ ul {
 }
 
 ul li {
-    font-weight: 600; /* Or try 700 for full bold */
+    font-weight: 600;
 }
-
 
 button {
     background-color: #f53423;
     color: white;
     border: none;
-    padding: 10px 20px;
-    font-size: 1rem;
+    padding: 10px 24px;
+    font-size: 1.05rem;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 8px;
     margin-top: 20px;
     transition: background-color 0.3s ease, transform 0.1s ease;
 }
@@ -58,12 +70,48 @@ button:hover {
 }
 
 button:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
 }
 
 strong {
     color: #831509;
 }
+
 em {
     color: #1985a1;
+}
+
+/* DICE LAYOUT */
+
+.dice-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: 0.5rem;
+}
+
+.die {
+    font-family: monospace;
+    white-space: pre;
+    padding: 0.5rem;
+    font-weight: bolder;
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease;
+    min-width: 64px;
+    text-align: center;
+}
+
+.die:hover {
+    transform: scale(1.08);
+    background-color: #fef2f2;
+}
+
+.status {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 0.5rem;
 }

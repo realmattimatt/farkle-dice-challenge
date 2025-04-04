@@ -8,17 +8,31 @@
 </head>
 <body>
     <div class="container">
-        <h1>🎲 Let the Game Begin!</h1>
-        <p><b>Players:</b></p>
+        <h1>{{ current_player }}'s Turn</h1>
+        <div class="status">Current Score: {{ current_score }}</div>
+    
+        <h2>🎲 Dice Roll:</h2>
+        <div class="dice-container">
+            {% for die in dice %}
+                <div class="die">{{ die }}</div>
+            {% endfor %}
+        </div>
+    
+        <form method="post" action="{{ url_for('keep_dice') }}">
+            <button type="submit">Keep Dice</button>
+        </form>
+    
+        <form method="post" action="{{ url_for('roll_dice') }}">
+            <button type="submit">Roll Again</button>
+        </form>
+    
+        <h2>Players:</h2>
         <ul>
             {% for player in players %}
                 <li>{{ player }}</li>
             {% endfor %}
         </ul>
-
-        <p>This is where the game logic will go next.</p>
-
-        <button onclick="alert('Game loop coming soon!')">Roll Dice</button>
     </div>
+    
 </body>
 </html>
