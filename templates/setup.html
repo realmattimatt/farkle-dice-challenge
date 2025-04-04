@@ -1,0 +1,19 @@
+<!-- templates/setup.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Choose Players</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Choose Number of Players</h1>
+        <form action="{{ url_for('setup') }}" method="POST">
+            <label for="num_players">How many players?</label>
+            <input type="number" name="num_players" id="num_players" min="2" max="6" required>
+            <button type="submit">Next</button>
+        </form>
+    </div>
+</body>
+</html>

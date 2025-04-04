@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Farkle Dice Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🎲 Welcome to Farkle Dice Challenge!🎲</h1>
+        <p><b>Test your luck and strategy in this classic dice game.</b></p>
+
+        <h2>How to Play</h2>
+        <ul>
+            <li>Roll six dice.</li>
+            <li>Choose scoring dice to keep.</li>
+            <li>Roll the rest or bank your points.</li>
+            <li>If you roll with no scoring dice, it's a Farkle! You lose all points that turn.</li>
+        </ul>
+        
+        <h2>Scoring</h2>
+        <ul>
+            <li>Single 1 = 100 points</li>
+            <li>Single 5 = 50 points</li>
+            <li>Three 1s = 1000 points</li>
+            <li>Three of any other number = number × 100 (e.g., 3×4s = 400)</li>
+            <li>Four of a kind = 1000</li>
+            <li>Three pairs = 1500</li>
+            <li>Four of a kind + pair = 1500</li>
+            <li><strong>Five of a kind = 2000</strong></li>
+            <li><strong>Two triplets = 2500</strong></li>
+            <li><strong>Six of a kind = 3000</strong></li>
+            <li><strong>Straight (1–6) = 3000</strong></li>
+        </ul>
+        
+
+        <a href="{{ url_for('players') }}"><button>Start Game</button></a>
+
+    </div>
+</body>
+</html>
+

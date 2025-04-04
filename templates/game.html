@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Farkle Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Let’s Farkle!</h1>
+        <p>Players:</p>
+        <ul>
+            {% for name in players %}
+                <li>{{ name }}</li>
+            {% endfor %}
+        </ul>
+        <p>Game logic coming soon...</p>
+    </div>
+</body>
+</html>
