@@ -1,27 +1,76 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import random
 from collections import Counter
+from Farkle_v3_animate import Analyzer
 
 app = Flask(__name__)
-app.secret_key = "your_secret_key"  # Required for session management
+app.secret_key = "your_secret_key"
 
-# Scorer class (same as you had before)
+# 🎯 Dice drawing dictionary
+dice_drawing = {
+    1: ("┌─────────┐", "│         │", "│    ○    │", "│         │", "└─────────┘"),
+    2: ("┌─────────┐", "│  ○      │", "│         │", "│      ○  │", "└─────────┘"),
+    3: ("┌─────────┐", "│  ○      │", "│    ○    │", "│      ○  │", "└─────────┘"),
+    4: ("┌─────────┐", "│  ○   ○  │", "│         │", "│  ○   ○  │", "└─────────┘"),
+    5: ("┌─────────┐", "│  ○   ○  │", "│    ○    │", "│  ○   ○  │", "└─────────┘"),
+    6: ("┌─────────┐", "│  ○   ○  │", "│  ○   ○  │", "│  ○   ○  │", "└─────────┘"),
+}
+
+# ✅ Scoring logic
 class Scorer:
     @staticmethod
     def calculate_score(dice):
         counts = Counter(dice)
-        values = list(counts.values())
         score = 0
-
         for num, count in counts.items():
             if count >= 3:
                 score += 1000 if num == 1 else num * 100
-                counts[num] -= 3
-
-        score += counts[1] * 100
-        score += counts[5] * 50
+                count -= 3
+            if num == 1:
+                score += count * 100
+            elif num == 5:
+                score += count * 50
         return score
 
+# 🎲 Main dice roll route
+@app.route("/roll_dice", methods=["POST"])
+def roll_dice():
+    players = session.get("players")
+    scores = session.get("scores")
+    current = session.get("current_player", 0)
+
+    # Roll dice
+    dice_roll = [random.randint(1, 6) for _ in range(6)]
+    scoring_dice = Analyzer.get_scoring_dice(dice_roll)
+    roll_score = Scorer.calculate_score(scoring_dice)
+
+    # 🎨 Draw ASCII dice
+    dice_faces = [dice_drawing[val] for val in dice_roll]
+    merged_faces = ["  ".join(row) for row in zip(*dice_faces)]
+
+    # Update player score
+    scores[current] += roll_score
+    session["scores"] = scores
+
+    return render_template(
+        "game.html",
+        current_player=players[current],
+        current_score=scores[current],
+        dice=dice_roll,
+        scoring_dice=scoring_dice,
+        score=roll_score,
+        dice_faces=merged_faces
+    )
+
+
+@app.route("/keep_dice", methods=["POST"])
+def keep_dice():
+    # 🔁 Placeholder: Eventually we'll process which dice the user chose to keep
+    return redirect(url_for("roll_dice"))
+
+
+
+# 🏠 Other Routes (unchanged)
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -31,7 +80,7 @@ def players():
     if request.method == "POST":
         player_names = request.form.getlist("player_name")
         return render_template("game.html", players=player_names)
-    return redirect(url_for("setup"))  # fallback if someone accesses it without data
+    return redirect(url_for("setup"))
 
 @app.route("/setup", methods=["GET", "POST"])
 def setup():
@@ -47,7 +96,6 @@ def start_game():
     if not player_names or len(player_names) < 2:
         return redirect(url_for("players"))
 
-    # Save to session
     session["players"] = player_names
     session["scores"] = [0] * len(player_names)
     session["current_player"] = 0
@@ -61,87 +109,8 @@ def play_turn():
     
     if not players:
         return redirect(url_for("setup"))
-    
-    # Show current player turn info
+
     return render_template("turn.html", player=players[current], score=scores[current])
-
-
-
-# Dice graphics (same as your previous implementation)
-dice_drawing = {
-    1: (
-        "┌─────────┐",
-        "│         │",
-        "│    ○    │",
-        "│         │",
-        "└─────────┘",
-    ),
-    2: (
-        "┌─────────┐",
-        "│  ○      │",
-        "│         │",
-        "│      ○  │",
-        "└─────────┘",
-    ),
-    3: (
-        "┌─────────┐",
-        "│  ○      │",
-        "│    ○    │",
-        "│      ○  │",
-        "└─────────┘",
-    ),
-    4: (
-        "┌─────────┐",
-        "│  ○   ○  │",
-        "│         │",
-        "│  ○   ○  │",
-        "└─────────┘",
-    ),
-    5: (
-        "┌─────────┐",
-        "│  ○   ○  │",
-        "│    ○    │",
-        "│  ○   ○  │",
-        "└─────────┘",
-    ),    
-    6: (
-        "┌─────────┐",
-        "│  ○   ○  │",
-        "│  ○   ○  │",
-        "│  ○   ○  │",
-        "└─────────┘",
-    )
-}
-
-# Update roll_dice() to include the dice graphics
-@app.route("/roll", methods=["POST"])
-def roll_dice():
-    players = session.get("players")
-    scores = session.get("scores")
-    current = session.get("current_player", 0)
-
-    # Simulate a dice roll (you could change the number of dice or add any other logic here)
-    dice_roll = [random.randint(1, 6) for _ in range(6)]
-
-    # Save the dice faces in session
-    dice_faces = [dice_drawing[dice] for dice in dice_roll]
-
-    # Calculate the score for the roll
-    roll_score = Scorer.calculate_score(dice_roll)
-
-    # Update the current player's score
-    scores[current] += roll_score
-    session["scores"] = scores
-
-    # Proceed to next player
-    current = (current + 1) % len(players)
-    session["current_player"] = current
-
-    # Render the current player's turn with updated score and dice faces
-    return render_template("turn.html", player=players[current], score=scores[current], dice_faces=dice_faces)
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
-

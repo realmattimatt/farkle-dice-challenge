@@ -10,13 +10,22 @@
     <div class="container">
         <h1>{{ current_player }}'s Turn</h1>
         <div class="status">Current Score: {{ current_score }}</div>
-    
+
         <h2>🎲 Dice Roll:</h2>
-        <div class="dice-container">
-            {% for die in dice %}
-                <div class="die">{{ die }}</div>
+
+        {% if dice_faces %}
+        <pre class="ascii-dice">
+            {% for line in dice_faces %}
+            {{ line }}
             {% endfor %}
-        </div>
+            </pre>
+            
+        {% endif %}
+        
+        
+
+        <!-- Keep Dice / Roll Again buttons here -->
+
     
         <form method="post" action="{{ url_for('keep_dice') }}">
             <button type="submit">Keep Dice</button>

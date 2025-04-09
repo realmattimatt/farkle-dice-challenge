@@ -115,3 +115,24 @@ em {
     color: #444;
     margin-bottom: 0.5rem;
 }
+
+.ascii-dice {
+    font-family: 'Courier New', 'Lucida Console', 'Consolas', monospace;
+    font-size: 16px;
+    line-height: 0.8;       /* 👈 This is the key to reducing white space */
+    white-space: pre;
+    text-align: center;
+    overflow-x: auto;
+    display: block;
+    padding: 1rem;
+    margin: 0 auto;
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+
+
+
+
+
+

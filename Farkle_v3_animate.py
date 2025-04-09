@@ -423,4 +423,4 @@ def show_scoreboard(players):
     print(totals)
 
 
-roll_dice()
+# roll_dice() Used for command line testing
