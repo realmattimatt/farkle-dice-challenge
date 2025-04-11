@@ -10,6 +10,8 @@
     <div class="container">
         <h1>{{ current_player }}'s Turn</h1>
         <div class="status">Current Score: {{ current_score }}</div>
+        <div class="status">Turn Score: {{ turn_points }}</div>
+
 
         <h2>🎲 Dice Roll:</h2>
         <div class="dice-container">
@@ -33,12 +35,11 @@
         </ul>
 
         <!-- Keep Dice / Roll Again buttons here -->
-
-
-    
         <form method="post" action="{{ url_for('keep_dice') }}">
-            <button type="submit">Keep Dice</button>
+            <button name="action" value="keep" type="submit">Keep Dice</button>
+            <button name="action" value="bank" type="submit">Bank Points</button>
         </form>
+
     
         <form method="post" action="{{ url_for('roll_dice') }}">
             <button type="submit">Roll Again</button>
