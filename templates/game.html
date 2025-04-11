@@ -12,6 +12,17 @@
         <div class="status">Current Score: {{ current_score }}</div>
         <div class="status">Turn Score: {{ turn_points }}</div>
 
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="toast-container">
+                {% for category, message in messages %}
+                    <div class="toast {{ category }}">{{ message }}</div>
+                {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+
 
         <h2>🎲 Dice Roll:</h2>
         <div class="dice-container">
@@ -35,15 +46,41 @@
         </ul>
 
         <!-- Keep Dice / Roll Again buttons here -->
+        <h3>Choose Dice to Keep:</h3>
         <form method="post" action="{{ url_for('keep_dice') }}">
-            <button name="action" value="keep" type="submit">Keep Dice</button>
+            <table class="keep-table">
+                <tr>
+                    <th>Die Face</th>
+                    <th>Count Available</th>
+                    <th>Keep</th>
+                </tr>
+                {% for val in range(1,7) %}
+                    {% set count = last_scoring.count(val) %}
+                    {% if count > 0 %}
+                    <tr>
+                        <td>{{ val }}</td>
+                        <td>{{ count }}</td>
+                        <td>
+                            <input type="number" name="keep_{{ val }}" min="0" max="{{ count }}" value="{{ count }}">
+                        </td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+
+            <br>
+            <button name="action" value="keep" type="submit">Keep Selected Dice</button>
             <button name="action" value="bank" type="submit">Bank Points</button>
         </form>
 
-    
-        <form method="post" action="{{ url_for('roll_dice') }}">
-            <button type="submit">Roll Again</button>
+
+        {% if turn_points == 0 %}
+        <form id="rollForm" method="POST" action="{{ url_for('roll_dice') }}">
+            <button type="button" id="rollButton" onclick="animateAndRoll()">🎲 Roll Dice</button>
         </form>
+        {% endif %}
+
+        
     
         <h2>Players:</h2>
         <ul>
@@ -51,6 +88,15 @@
                 <li>{{ player }}</li>
             {% endfor %}
         </ul>
+
+
+        <h2>📊 Scoreboard:</h2>
+        <ul class="scoreboard">
+            {% for name, score in players_scores %}
+                <li><strong>{{ name }}</strong>: {{ score }} pts</li>
+            {% endfor %}
+        </ul>
+
     </div>
     {#
         <script>
@@ -79,5 +125,37 @@
         });
     </script>
     #}
+
+    <script>
+        function animateAndRoll() {
+            const rollButton = document.getElementById('rollButton');
+            rollButton.disabled = true;
+        
+            const diceLine = document.querySelector('.dice-line');
+            if (!diceLine) return;
+        
+            const frames = [
+                ["┌─────────┐","│         │","│    ●    │","│         │","└─────────┘"],
+                ["┌─────────┐","│  ●      │","│         │","│      ●  │","└─────────┘"],
+                ["┌─────────┐","│  ●      │","│    ●    │","│      ●  │","└─────────┘"],
+                ["┌─────────┐","│  ●   ●  │","│         │","│  ●   ●  │","└─────────┘"],
+                ["┌─────────┐","│  ●   ●  │","│    ●    │","│  ●   ●  │","└─────────┘"],
+                ["┌─────────┐","│  ●   ●  │","│  ●   ●  │","│  ●   ●  │","└─────────┘"]
+            ];
+        
+            let counter = 0;
+            const interval = setInterval(() => {
+                const randomRoll = Array.from({ length: 6 }, () => Math.floor(Math.random() * 6));
+                const merged = Array(5).fill("").map((_, i) => randomRoll.map(n => frames[n][i]).join("   "));
+                diceLine.innerHTML = `<pre class="ascii-dice">${merged.join("\n")}</pre>`;
+                counter++;
+                if (counter >= 10) {
+                    clearInterval(interval);
+                    document.getElementById('rollForm').submit();
+                }
+            }, 100);
+        }
+        </script>
+        
 </body>
 </html>

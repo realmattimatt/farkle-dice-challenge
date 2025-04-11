@@ -1,0 +1,25 @@
+<!-- templates/hot_dice.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hot Dice!</title>
+    <meta http-equiv="refresh" content="3;url={{ url_for('roll_dice') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #111;
+            color: #0f0;
+            font-family: monospace;
+            font-size: 2rem;
+        }
+    </style>
+</head>
+<body>
+    🔥 Hot Dice! You scored with all 6 — rolling again...
+</body>
+</html>

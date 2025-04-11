@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Farkle!</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .farkle-banner {
+            text-align: center;
+            font-size: 2rem;
+            color: #d9534f;
+            margin-top: 2rem;
+        }
+        .dice-line {
+            display: flex;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+        .ascii-dice {
+            font-family: monospace;
+            white-space: pre;
+            margin: 0 0.5rem;
+        }
+        .next-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        .next-button button {
+            padding: 0.5rem 1.5rem;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="farkle-banner">❌ {{ player }} Farkled! No scoring dice!</div>
+
+        <h2 style="text-align:center;">Dice Rolled:</h2>
+        <div class="dice-line">
+            {% for i in range(dice|length) %}
+                {% set die_lines = dice_faces_grouped[i] %}
+                <pre class="ascii-dice farkle-die">{{ die_lines | join('\n') }}</pre>
+
+            {% endfor %}
+        </div>
+
+        <div class="next-button">
+            <form action="{{ url_for('roll_dice') }}" method="POST">
+                <button type="submit">Next Player</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

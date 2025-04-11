@@ -123,7 +123,6 @@ class Analyzer:
         counts = Counter(dice)
         values = list(counts.values())
         scoring_dice = []
-        used = Counter()
 
         # Special combinations (no overlap allowed)
         if sorted(dice) == [1, 2, 3, 4, 5, 6]:
@@ -152,7 +151,6 @@ class Analyzer:
 
         for num in range(1, 7):
             count = temp_counts[num]
-
             if count >= 5:
                 scoring_dice += [num] * 5
                 temp_counts[num] -= 5
@@ -163,11 +161,12 @@ class Analyzer:
                 scoring_dice += [num] * 3
                 temp_counts[num] -= 3
 
-        # After sets are removed, check for single 1s and 5s
         scoring_dice += [1] * temp_counts[1]
         scoring_dice += [5] * temp_counts[5]
 
-        return scoring_dice
+        # ✅ Final safeguard: if no scoring dice, it's a Farkle!
+        return scoring_dice if scoring_dice else []
+
 
 
 

@@ -17,6 +17,29 @@
                     <pre>{{ dice_face | join("\n") }}</pre>
                 </div>
             {% endfor %}
+
+            <button name="action" value="keep" type="submit">Keep Selected Dice</button>
+            <button name="action" value="bank" type="submit">Bank Points</button>
+        </form>
+
+        
+    
+        <h2>Players:</h2>
+        <ul>
+            {% for player in players %}
+                <li>{{ player }}</li>
+            {% endfor %}
+        </ul>
+
+
+        <h2>📊 Scoreboard:</h2>
+        <ul class="scoreboard">
+            {% for name, score in players_scores %}
+                <li><strong>{{ name }}</strong>: {{ score }} pts</li>
+            {% endfor %}
+        </ul>
+
+    </div>
         </div>
         
         <form action="{{ url_for('roll_dice') }}" method="POST">

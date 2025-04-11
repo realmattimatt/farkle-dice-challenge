@@ -1,0 +1,29 @@
+<!-- templates/winner.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🏆 Winner!</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #111;
+            color: #fff;
+        }
+        h1 {
+            color: gold;
+            font-size: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>🏆 {{ winner }} wins with {{ score }} points!</h1>
+    <p>🎲Thanks for playing Farkle Dice 🎲</p>
+</body>
+</html>
