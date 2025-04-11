@@ -12,19 +12,28 @@
         <div class="status">Current Score: {{ current_score }}</div>
 
         <h2>🎲 Dice Roll:</h2>
+        <div class="dice-container">
+            <div class="dice-line">
+                {% for i in range(dice|length) %}
+                    {% set die_lines = dice_faces_grouped[i] %}
+                    {% if highlight_flags[i] %}
+                        <pre class="ascii-dice scoring-die">{{ die_lines | join('\n') }}</pre>
+                    {% else %}
+                        <pre class="ascii-dice non-scoring-die">{{ die_lines | join('\n') }}</pre>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
 
-        {% if dice_faces %}
-        <pre class="ascii-dice">
-            {% for line in dice_faces %}
-            {{ line }}
+        <h3>Scoring Breakdown:</h3>
+        <ul>
+            {% for line in score_details %}
+                <li>{{ line }}</li>
             {% endfor %}
-            </pre>
-            
-        {% endif %}
-        
-        
+        </ul>
 
         <!-- Keep Dice / Roll Again buttons here -->
+
 
     
         <form method="post" action="{{ url_for('keep_dice') }}">
@@ -42,6 +51,32 @@
             {% endfor %}
         </ul>
     </div>
+    {#
+        <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const diceOutput = document.getElementById("dice-output");
     
+            if (!diceOutput) return;
+    
+            const frames = [
+                ["┌─────────┐","│         │","│    ○    │","│         │","└─────────┘"],
+                ["┌─────────┐","│  ○      │","│         │","│      ○  │","└─────────┘"],
+                ["┌─────────┐","│  ○      │","│    ○    │","│      ○  │","└─────────┘"],
+                ["┌─────────┐","│  ○   ○  │","│         │","│  ○   ○  │","└─────────┘"],
+                ["┌─────────┐","│  ○   ○  │","│    ○    │","│  ○   ○  │","└─────────┘"],
+                ["┌─────────┐","│  ○   ○  │","│  ○   ○  │","│  ○   ○  │","└─────────┘"]
+            ];
+    
+            let counter = 0;
+            const interval = setInterval(() => {
+                const randomRoll = Array.from({ length: 6 }, () => Math.floor(Math.random() * 6));
+                const merged = Array(5).fill("").map((_, i) => randomRoll.map(n => frames[n][i]).join("   "));
+                diceOutput.innerHTML = `<pre class="ascii-dice">${merged.join("\n")}</pre>`;
+                counter++;
+                if (counter >= 10) clearInterval(interval); // 10 frames ≈ 1 second
+            }, 100);
+        });
+    </script>
+    #}
 </body>
 </html>

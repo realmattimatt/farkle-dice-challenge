@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import random
 from collections import Counter
-from Farkle_v3_animate import Analyzer
+from Farkle_v3_animate import Analyzer, Scorer, dice_drawing
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
@@ -17,22 +17,25 @@ dice_drawing = {
 }
 
 # ✅ Scoring logic
-class Scorer:
-    @staticmethod
-    def calculate_score(dice):
-        counts = Counter(dice)
-        score = 0
-        for num, count in counts.items():
-            if count >= 3:
-                score += 1000 if num == 1 else num * 100
-                count -= 3
-            if num == 1:
-                score += count * 100
-            elif num == 5:
-                score += count * 50
-        return score
+# class Scorer: 
+# 
+# Not needed anymore as Farkle_v3_animate.py already has it
 
-# 🎲 Main dice roll route
+
+#     @staticmethod
+#     def calculate_score(dice):
+#         counts = Counter(dice)
+#         score = 0
+#         for num, count in counts.items():
+#             if count >= 3:
+#                 score += 1000 if num == 1 else num * 100
+#                 count -= 3
+#             if num == 1:
+#                 score += count * 100
+#             elif num == 5:
+#                 score += count * 50
+#         return score
+
 @app.route("/roll_dice", methods=["POST"])
 def roll_dice():
     players = session.get("players")
@@ -43,12 +46,27 @@ def roll_dice():
     dice_roll = [random.randint(1, 6) for _ in range(6)]
     scoring_dice = Analyzer.get_scoring_dice(dice_roll)
     roll_score = Scorer.calculate_score(scoring_dice)
+    score_details = Scorer.score_breakdown(scoring_dice)
 
-    # 🎨 Draw ASCII dice
-    dice_faces = [dice_drawing[val] for val in dice_roll]
-    merged_faces = ["  ".join(row) for row in zip(*dice_faces)]
 
-    # Update player score
+    # Grouped ASCII dice
+    dice_faces_grouped = [dice_drawing[val] for val in dice_roll]
+
+    # Highlight logic
+    def get_highlight_flags(dice_roll, scoring_dice):
+        temp = scoring_dice.copy()
+        flags = []
+        for die in dice_roll:
+            if die in temp:
+                flags.append(True)
+                temp.remove(die)
+            else:
+                flags.append(False)
+        return flags
+
+    highlight_flags = get_highlight_flags(dice_roll, scoring_dice)
+
+    # Update score
     scores[current] += roll_score
     session["scores"] = scores
 
@@ -57,9 +75,10 @@ def roll_dice():
         current_player=players[current],
         current_score=scores[current],
         dice=dice_roll,
-        scoring_dice=scoring_dice,
-        score=roll_score,
-        dice_faces=merged_faces
+        dice_faces_grouped=dice_faces_grouped,
+        highlight_flags=highlight_flags,
+        players=players,
+        score_details=score_details
     )
 
 
@@ -67,7 +86,6 @@ def roll_dice():
 def keep_dice():
     # 🔁 Placeholder: Eventually we'll process which dice the user chose to keep
     return redirect(url_for("roll_dice"))
-
 
 
 # 🏠 Other Routes (unchanged)
