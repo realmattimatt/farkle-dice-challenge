@@ -197,3 +197,34 @@ em {
     padding: 0.3rem;
     margin: 0.2rem;
 }
+
+* {
+    box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 0.75rem;
+        font-size: 1rem;
+        background-attachment: scroll;
+    }
+
+    .container {
+        width: 100%;
+        padding: 1rem;
+        border-radius: 12px;
+    }
+
+    h1 {
+        font-size: 1.7rem;
+    }
+
+    .keep-table th,
+    .keep-table td {
+        padding: 0.35rem;
+    }
+
+    button {
+        padding: 12px 16px;
+    }
+}
