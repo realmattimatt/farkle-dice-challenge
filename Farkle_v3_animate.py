@@ -56,7 +56,7 @@ class Scorer:
 
         for num, count in counts.items():
             if count >= 3:
-                score += 1000 if num == 1 else num * 100
+                score += 750 if num == 1 else num * 100
                 counts[num] -= 3
 
         score += counts[1] * 100
@@ -93,7 +93,7 @@ class Scorer:
                 breakdown.append(f"Four of a kind ({num}s) = 1000")
             elif count == 3:
                 if num == 1:
-                    breakdown.append("Three 1s = 1000")
+                    breakdown.append("Three 1s = 750")
                 else:
                     breakdown.append(f"Three {num}s = {num * 100}")
 
