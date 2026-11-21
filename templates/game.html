@@ -73,14 +73,6 @@
             <button name="action" value="bank" type="submit">Bank Points</button>
         </form>
 
-
-        {% if turn_points == 0 %}
-        <form id="rollForm" method="POST" action="{{ url_for('roll_dice') }}">
-            <button type="button" id="rollButton" onclick="animateAndRoll()">🎲 Roll Dice</button>
-        </form>
-        {% endif %}
-
-        
     
         <h2>Players:</h2>
         <ul>

@@ -4,11 +4,12 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 import random
 from collections import Counter
 from Farkle_v3_animate import Analyzer, Scorer, dice_drawing
+import os
 
 WINNING_SCORE = 5000
 
 app = Flask(__name__)
-app.secret_key = "your_secret_key"
+app.secret_key = os.environ.get("SECRET_KEY", "local-only-key")
 
 @app.route("/roll_dice", methods=["GET", "POST"])
 def roll_dice():
@@ -250,4 +251,4 @@ def hot_dice_pause():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
